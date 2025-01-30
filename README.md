@@ -24,4 +24,4 @@ This game is still under development, and not all features are implemented yet. 
 
 Developed by:
 - **Nathan Wand**
-- **Nico Lopera**
+- **Brandon Wand**
