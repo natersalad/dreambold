@@ -22,9 +22,9 @@ mouse_filter = 1
 
 [node name="CanvasLayer" type="CanvasLayer" parent="UI"]
 process_mode = 3
+follow_viewport_scale = 3.0
 
 [node name="PauseMenu" parent="UI/CanvasLayer" instance=ExtResource("1_prtgv")]
-mouse_filter = 1
 
 [node name="GameController" type="Control" parent="."]
 anchors_preset = 0
