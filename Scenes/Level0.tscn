@@ -1,9 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://oj3blpxqf1bl"]
+[gd_scene load_steps=16 format=3 uid="uid://oj3blpxqf1bl"]
 
 [ext_resource type="PackedScene" uid="uid://bwggrf7sbmkcv" path="res://Scenes/PlayerCharacterScene.tscn" id="1_tvhlt"]
 [ext_resource type="Texture2D" uid="uid://cosanfwg57e4y" path="res://Arts/Textures/kenney_prototype_textures/orange/texture_03.png" id="2_v37ox"]
 [ext_resource type="Texture2D" uid="uid://c3wt61i40kd0n" path="res://Arts/Textures/kenney_prototype_textures/dark/texture_03.png" id="3_lilqa"]
 [ext_resource type="Script" path="res://Scripts/Others/JumppadScript.gd" id="4_nyumb"]
+[ext_resource type="Texture2D" uid="uid://dd4l3c87gndlk" path="res://icon.svg" id="5_uyntf"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fjbi6"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -48,6 +49,9 @@ albedo_color = Color(0.12549, 0.568627, 1, 1)
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_vm7yl"]
 height = 0.15
 radius = 2.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3nxvw"]
+albedo_texture = ExtResource("5_uyntf")
 
 [node name="Level3" type="Node3D"]
 
@@ -287,6 +291,15 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Map/Jumppads/Jumppad4/Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0425774, 0)
 shape = SubResource("CylinderShape3D_vm7yl")
+
+[node name="AITextureWall" type="Node3D" parent="Map"]
+
+[node name="Wall" type="CSGBox3D" parent="Map/AITextureWall"]
+transform = Transform3D(1.00842, -0.0178733, 0, -4.14683e-10, -8.30463e-08, 0.1, -0.00948683, -1.89988, -4.37114e-09, -46.0905, 8.20324, -0.212326)
+material_override = SubResource("StandardMaterial3D_3nxvw")
+use_collision = true
+collision_mask = 2
+size = Vector3(0.001, 8, 140)
 
 [connection signal="area_entered" from="Map/Jumppads/Jumppad/Area3D" to="Map/Jumppads/Jumppad" method="_on_area_3d_area_entered"]
 [connection signal="area_entered" from="Map/Jumppads/Jumppad3/Area3D" to="Map/Jumppads/Jumppad3" method="_on_area_3d_area_entered"]

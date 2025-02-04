@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://bwggrf7sbmkcv"]
+[gd_scene load_steps=14 format=3 uid="uid://bwggrf7sbmkcv"]
 
 [ext_resource type="Script" path="res://Scripts/PlayerCharacter/PlayerCharacterScript.gd" id="1_5dbx1"]
 [ext_resource type="Script" path="res://Scripts/PlayerCharacter/CameraScript.gd" id="2_x12n0"]
+[ext_resource type="ArrayMesh" uid="uid://x1x8iotygdy0" path="res://Arts/BlasterCannon/Low Poly Arm Cannon.obj" id="3_d6raq"]
 [ext_resource type="Script" path="res://Scripts/PlayerCharacter/HUDScript.gd" id="3_l04tv"]
 [ext_resource type="Script" path="res://Scripts/PlayerCharacter/HUDRedimensionmentScript.gd" id="5_jgfg0"]
 [ext_resource type="Shader" path="res://Arts/Shaders/SpeedLinesShader.gdshader" id="12_8u6b8"]
@@ -99,11 +100,17 @@ camTiltRotationSpeed = 2.2
 mouseInputSpeed = 2.0
 
 [node name="Camera3D" type="Camera3D" parent="CameraHolder"]
+keep_aspect = 0
 cull_mask = 1
 current = true
 fov = 100.0
 near = 0.01
 far = 1000.0
+
+[node name="LowPolyArmCannon" type="MeshInstance3D" parent="CameraHolder/Camera3D"]
+transform = Transform3D(-0.0871558, 0, -0.996195, 0, 1, 0, 0.996195, 0, -0.0871558, 0.2, -0.17, -0.06)
+mesh = ExtResource("3_d6raq")
+skeleton = NodePath("../../..")
 
 [node name="CeilingCheck" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.758088, 0)

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://gyw0w4mij6jw"
-path.s3tc="res://.godot/imported/texture_01.png-003c18f827d850afc3f98a672d307da0.s3tc.ctex"
+uid="uid://cpplg13fuhqe8"
+path.s3tc="res://.godot/imported/9a3351c1.png-6bf1e141a511da401fab14caf2a2cb1f.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://Arts/Textures/kenney_prototype_textures/purple/texture_01.png"
-dest_files=["res://.godot/imported/texture_01.png-003c18f827d850afc3f98a672d307da0.s3tc.ctex"]
+source_file="res://Arts/BlasterCannon/9a3351c1.png"
+dest_files=["res://.godot/imported/9a3351c1.png-6bf1e141a511da401fab14caf2a2cb1f.s3tc.ctex"]
 
 [params]
 
