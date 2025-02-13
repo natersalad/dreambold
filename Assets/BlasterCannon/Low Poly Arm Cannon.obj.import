@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://x1x8iotygdy0"
+path="res://.godot/imported/Low Poly Arm Cannon.obj-354057b7b22bcdc9dbcadc37fad86e63.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Low Poly Arm Cannon.obj-354057b7b22bcdc9dbcadc37fad86e63.mesh"]
+
+source_file="res://Assets/BlasterCannon/Low Poly Arm Cannon.obj"
+dest_files=["res://.godot/imported/Low Poly Arm Cannon.obj-354057b7b22bcdc9dbcadc37fad86e63.mesh", "res://.godot/imported/Low Poly Arm Cannon.obj-354057b7b22bcdc9dbcadc37fad86e63.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

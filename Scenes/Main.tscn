@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://celh6ddu3qjud"]
 
-[ext_resource type="PackedScene" uid="uid://cghpnt85gsdye" path="res://Scenes/PauseMenu.tscn" id="1_prtgv"]
+[ext_resource type="PackedScene" uid="uid://cghpnt85gsdye" path="res://Scenes/UI/PauseMenu.tscn" id="1_prtgv"]
 [ext_resource type="Script" path="res://Scripts/GameController.gd" id="1_xfh8j"]
 
 [node name="Main" type="Control"]

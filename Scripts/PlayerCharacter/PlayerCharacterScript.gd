@@ -6,7 +6,7 @@ class_name PlayerCharacter
 #states variables
 enum states
 {
-	IDLE, WALK, RUN, CROUCH, SLIDE, JUMP, INAIR, ONWALL, DASH 
+	IDLE, WALK, RUN, CROUCH, SLIDE, JUMP, INAIR, ONWALL, DASH, NOCLIP
 }
 var currentState 
 
@@ -82,6 +82,10 @@ var velocityPreDash : Vector3
 @onready var fallGravity : float = (-2.0 * jumpHeight) / (jumpTimeToFall * jumpTimeToFall)
 @export var wallGravityMultiplier : float
 
+#noclip variables
+@export_group("noclip variables")
+@export var noclipSpeed : float = 50.0
+
 #references variables
 @onready var cameraHolder = $CameraHolder
 @onready var standHitbox = $standingHitbox
@@ -123,17 +127,28 @@ func _process(_delta):
 	displayStats()
 	
 func _physics_process(delta):
+	if currentState == states.NOCLIP:
+		noclipProcess(delta)
+		return
 	#the behaviours that is preferable to check every "physics" frame
-	
 	applies(delta)
-	
 	move(delta)
-	
 	collisionHandling()
-	
 	move_and_slide()
 
 func inputManagement():
+	# Toggle noclip mode when the action is triggered
+	if Input.is_action_just_pressed("toggle_noclip"):
+		if currentState == states.NOCLIP:
+			runStateChanges()  # Exit noclip mode and revert to run state (or any other state you prefer)
+		else:
+			noclipStateChanges()
+		return
+		
+	# If currently in NOCLIP, do not process other normal state inputs.
+	if currentState == states.NOCLIP:
+		return
+
 	#for each state, check the possibles actions available
 	#This allow to have a good control of the controller behaviour, because you can easely check the actions possibls, 
 	#add or remove some, and it prevent certain actions from being played when they shouldn't be
@@ -549,3 +564,38 @@ func collisionHandling():
 			#here, we check the layer of the collider, then we check if the layer 3 (walkableWall) is enabled, with 1 << 3-1. If theses two points are valid, the character can wallrun
 			if layer & (1 << 3-1) != 0: canWallRun = true 
 			else: canWallRun = false 
+
+func noclipProcess(delta):
+	# Gather horizontal input from the default actions.
+	var horizontal_input = Input.get_vector("moveLeft", "moveRight", "moveForward", "moveBackward")
+	var vertical_input = 0.0
+	# Map jump to upward movement
+	if Input.is_action_pressed("jump"):
+		vertical_input += 1
+	# Map crouch/slide to downward movement
+	if Input.is_action_pressed("crouch | slide"):
+		vertical_input -= 1
+
+	# Compute horizontal direction relative to the camera.
+	var camera_basis = cameraHolder.global_transform.basis
+	var forward = camera_basis.z.normalized()
+	var right = camera_basis.x.normalized()
+	var horizontal_dir = (right * horizontal_input.x + forward * horizontal_input.y)
+	
+	# Combine horizontal and vertical input.
+	var final_direction = Vector3(horizontal_dir.x, vertical_input, horizontal_dir.z)
+	if final_direction != Vector3.ZERO:
+		final_direction = final_direction.normalized()
+	
+	velocity = final_direction * noclipSpeed
+	# Directly update the global position, bypassing built-in physics (collisions, gravity, etc.)
+	global_position += velocity * delta
+
+func noclipStateChanges():
+	currentState = states.NOCLIP
+	velocity = Vector3.ZERO
+	# Disable collision hitboxes since we now ignore collisions.
+	if !standHitbox.disabled:
+		standHitbox.disabled = true
+	if !crouchHitbox.disabled:
+		crouchHitbox.disabled = true

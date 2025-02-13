@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bilwdjert18yi"
+path="res://.godot/imported/samus_highquality_blaster.obj-9661320231fb29dd96c4dd36475b028f.mesh"
+
+[deps]
+
+files=["res://.godot/imported/samus_highquality_blaster.obj-9661320231fb29dd96c4dd36475b028f.mesh"]
+
+source_file="res://Assets/BlasterCannon/samus_highquality_blaster.obj"
+dest_files=["res://.godot/imported/samus_highquality_blaster.obj-9661320231fb29dd96c4dd36475b028f.mesh", "res://.godot/imported/samus_highquality_blaster.obj-9661320231fb29dd96c4dd36475b028f.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false
