@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://3udewigj8btq"]
+
+[ext_resource type="Script" path="res://Menus/RestartScene/restart.gd" id="1_g1fed"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0g7m1"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="Restart" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_g1fed")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0g7m1")
+
+[node name="Label" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "RESTARTING"
+horizontal_alignment = 1
+vertical_alignment = 1

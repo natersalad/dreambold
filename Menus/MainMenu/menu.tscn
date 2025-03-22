@@ -1,0 +1,96 @@
+[gd_scene load_steps=4 format=3 uid="uid://cvjp26i8q7i77"]
+
+[ext_resource type="Script" path="res://Menus/MainMenu/menu.gd" id="1_6mbwr"]
+[ext_resource type="Texture2D" uid="uid://cxmd32mn1kf0n" path="res://Assets/TemplateImages/Logo.png" id="2_yfrnh"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_1nq22"]
+font_size = 80
+outline_size = 24
+outline_color = Color(1, 0.62, 0.62, 1)
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6mbwr")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_yfrnh")
+expand_mode = 3
+
+[node name="VersionNum" type="Label" parent="."]
+layout_mode = 1
+offset_right = 659.0
+offset_bottom = 358.0
+text = "V: 0.5"
+uppercase = true
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_right = -2.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "DreamBold"
+label_settings = SubResource("LabelSettings_1nq22")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -91.0
+offset_top = -168.0
+offset_right = 92.0
+grow_horizontal = 2
+grow_vertical = 0
+rotation = -0.00214795
+alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 0
+text = "Start"
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="SettingsButton" type="Button" parent="VBoxContainer/MarginContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 0
+text = "Settings"
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="QuitButton" type="Button" parent="VBoxContainer/MarginContainer3"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 0
+text = "Quit"
+
+[connection signal="pressed" from="VBoxContainer/MarginContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer2/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer3/QuitButton" to="." method="_on_quit_button_pressed"]

@@ -1,0 +1,130 @@
+[gd_scene load_steps=15 format=3 uid="uid://c5l1xljlu2wrk"]
+
+[ext_resource type="PackedScene" uid="uid://bwggrf7sbmkcv" path="res://Gameplay/Player/PlayerCharacterScene.tscn" id="1_db3my"]
+[ext_resource type="Script" path="res://Gameplay/Levels/level.gd" id="1_ww2tu"]
+[ext_resource type="Texture2D" uid="uid://c3wt61i40kd0n" path="res://Assets/Textures/kenney_prototype_textures/dark/texture_03.png" id="2_1m2h1"]
+[ext_resource type="Script" path="res://Gameplay/Jumppad/JumppadScript.gd" id="3_w3rps"]
+[ext_resource type="Texture2D" uid="uid://dd4l3c87gndlk" path="res://icon.svg" id="4_vm8uf"]
+[ext_resource type="PackedScene" uid="uid://8bg1lm7rwoqt" path="res://Enemys/Zombie/zombie.tscn" id="6_2ob7m"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fjbi6"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_iebnq"]
+sky_material = SubResource("ProceduralSkyMaterial_fjbi6")
+
+[sub_resource type="Environment" id="Environment_pyxgo"]
+background_mode = 2
+sky = SubResource("Sky_iebnq")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3nxvw"]
+albedo_texture = ExtResource("4_vm8uf")
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_l1ns8"]
+vertices = PackedVector3Array(-30.2235, 0.0390625, -24.6861, -28.7235, 0.0390625, -24.9361, -28.7235, 0.0390625, -31.9361, -31.2235, 0.0390625, -23.4361, -70.7235, 0.0390625, -31.9361, -9.7235, 0.0390625, -21.6861, -26.2235, 0.0390625, -21.6861, -26.9735, 0.0390625, -20.1861, -28.2235, 0.0390625, -19.6861, -9.7235, 0.0390625, 31.3139, -30.7235, 0.0390625, -20.4361, -70.7235, 0.0390625, 31.3139, -31.4735, 0.0390625, -21.9361, -27.7235, 0.0390625, -24.9361, -26.4735, 0.0390625, -23.9361, -9.7235, 0.0390625, -31.9361, -29.7235, 1.03906, -23.6861, -30.2235, 1.03906, -22.9361, -30.2235, 1.03906, -21.9361, -29.2235, 1.03906, -20.9361, -28.2235, 1.03906, -20.9361, -27.2235, 1.03906, -21.9361, -28.2235, 1.03906, -23.9361, -27.4735, 1.03906, -23.4361)
+polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(0, 3, 2), PackedInt32Array(2, 3, 4), PackedInt32Array(7, 6, 5), PackedInt32Array(7, 5, 8), PackedInt32Array(8, 5, 9), PackedInt32Array(10, 8, 4), PackedInt32Array(4, 8, 11), PackedInt32Array(11, 8, 9), PackedInt32Array(4, 3, 12), PackedInt32Array(4, 12, 10), PackedInt32Array(13, 1, 2), PackedInt32Array(13, 2, 14), PackedInt32Array(14, 2, 15), PackedInt32Array(14, 15, 5), PackedInt32Array(5, 6, 14), PackedInt32Array(18, 17, 16), PackedInt32Array(19, 18, 20), PackedInt32Array(20, 18, 21), PackedInt32Array(21, 18, 16), PackedInt32Array(21, 16, 22), PackedInt32Array(21, 22, 23)]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_st80m"]
+albedo_texture = ExtResource("2_1m2h1")
+uv1_scale = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rd3mg"]
+albedo_color = Color(0.12549, 0.568627, 1, 1)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_vm7yl"]
+height = 0.15
+radius = 2.0
+
+[node name="Level1" type="Node3D" node_paths=PackedStringArray("player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0546017, 0.0611305, -0.0480537)
+script = ExtResource("1_ww2tu")
+player = NodePath("PlayerCharacter/PlayerCharacterV2")
+
+[node name="Environment" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.8985, 0, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_pyxgo")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="PlayerCharacter" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.8985, 0, 0)
+
+[node name="PlayerCharacterV2" parent="PlayerCharacter" instance=ExtResource("1_db3my")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38.5544, 1.54036, 0)
+
+[node name="Map" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.8985, 0, 0)
+
+[node name="AITextureWall" type="Node3D" parent="Map"]
+transform = Transform3D(0.0331637, 0, 0.748377, 0, 1, 0, -0.0374189, 0, 0.663273, -51, 0, 14.9295)
+
+[node name="Wall" type="CSGBox3D" parent="Map/AITextureWall"]
+transform = Transform3D(1.00842, -0.0178733, 0, -4.14683e-10, -8.30463e-08, 0.1, -0.00948683, -1.89988, -4.37114e-09, -46.0905, 8.20324, -0.212326)
+material_override = SubResource("StandardMaterial3D_3nxvw")
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+size = Vector3(0.001, 8, 140)
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="Map"]
+navigation_mesh = SubResource("NavigationMesh_l1ns8")
+
+[node name="Blocks" type="Node3D" parent="Map/NavigationRegion3D"]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Map/NavigationRegion3D/Blocks"]
+transform = Transform3D(0.23857, 0, 0, 0, 0.999535, 0, 0, 0, 0.306202, -40.2094, -701.277, -0.284891)
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+size = Vector3(260, 1402.52, 210)
+material = SubResource("StandardMaterial3D_st80m")
+
+[node name="Jumppads" type="Node3D" parent="Map/NavigationRegion3D"]
+
+[node name="Jumppad" type="CSGCylinder3D" parent="Map/NavigationRegion3D/Jumppads"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.7237, 0.513615, -22.4027)
+material_override = SubResource("StandardMaterial3D_rd3mg")
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+radius = 2.0
+height = 0.15
+script = ExtResource("3_w3rps")
+jumpBoostValue = 22.0
+
+[node name="Area3D" type="Area3D" parent="Map/NavigationRegion3D/Jumppads/Jumppad"]
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/NavigationRegion3D/Jumppads/Jumppad/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0425774, 0)
+shape = SubResource("CylinderShape3D_vm7yl")
+
+[node name="Enemys" type="Node3D" parent="Map/NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38.8985, 0, 0)
+
+[node name="zombie" parent="Map/NavigationRegion3D/Enemys" instance=ExtResource("6_2ob7m")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -15.7899, -0.315519, 0)
+player_path = NodePath("../../../../PlayerCharacter/PlayerCharacterV2")
+
+[node name="ZombieSpawner" type="Node3D" parent="Map/NavigationRegion3D/Enemys"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20.975)
+
+[node name="ZombieSpawner2" type="Node3D" parent="Map/NavigationRegion3D/Enemys"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.338, 0, 20.1815)
+
+[node name="ZombieSpawner3" type="Node3D" parent="Map/NavigationRegion3D/Enemys"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.338, 0, -24.0729)
+
+[node name="ZombieSpawner4" type="Node3D" parent="Map/NavigationRegion3D/Enemys"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.4063, 0, -24.0729)
+
+[connection signal="area_entered" from="Map/NavigationRegion3D/Jumppads/Jumppad/Area3D" to="Map/NavigationRegion3D/Jumppads/Jumppad" method="_on_area_3d_area_entered"]

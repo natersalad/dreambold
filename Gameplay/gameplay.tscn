@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://celh6ddu3qjud"]
+
+[ext_resource type="Script" path="res://Gameplay/gameplay.gd" id="1_0r405"]
+[ext_resource type="PackedScene" uid="uid://cghpnt85gsdye" path="res://Menus/PauseMenu/PauseMenu.tscn" id="1_loq47"]
+[ext_resource type="PackedScene" uid="uid://c5l1xljlu2wrk" path="res://Gameplay/Levels/Level1.tscn" id="2_bsmeb"]
+
+[node name="Gameplay" type="Node3D"]
+script = ExtResource("1_0r405")
+
+[node name="World" type="Node3D" parent="."]
+
+[node name="Level1" parent="World" instance=ExtResource("2_bsmeb")]
+script = null
+
+[node name="HUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 1
+
+[node name="CanvasLayer" type="CanvasLayer" parent="HUD"]
+process_mode = 3
+follow_viewport_scale = 3.0
+
+[node name="PauseMenu" parent="HUD/CanvasLayer" instance=ExtResource("1_loq47")]

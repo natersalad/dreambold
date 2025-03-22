@@ -11,18 +11,24 @@ config_version=5
 [application]
 
 config/name="dreambold"
-run/main_scene="res://Scenes/Main.tscn"
+run/main_scene="res://Menus/MainMenu/menu.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
 SettingsDataManager="*res://addons/modular-settings-menu/singletons/settings_data_manager.gd"
+SceneManager="*res://Autoloads/SceneManager.gd"
+
+[debug]
+
+settings/stdout/print_fps=true
 
 [display]
 
-window/size/viewport_width=1920
-window/size/viewport_height=1080
+window/size/viewport_width=640
+window/size/viewport_height=360
+window/size/always_on_top=true
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 
