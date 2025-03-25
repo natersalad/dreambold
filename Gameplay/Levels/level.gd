@@ -1,15 +1,19 @@
 class_name Level extends Node3D
 
-@export var player:PlayerCharacter
 @export var data:LevelDataHandoff
+
+@onready var spawns = $Map/Spawns
+@onready var navigation_region = $Map/NavigationRegion3D/Enemys
+@onready var player = get_tree().get_first_node_in_group("PlayerCharacter")
+
+var zombie = load("res://Enemys/Zombie/zombie.tscn")
+var instance
 
 func _ready() -> void:
 	player.disable()
-	player.visible = false
 	# This block is here to allow us to test current scene without needing the SceneManager to call these :) 
 	if data == null: 
 		start_scene()
-		
 
 ## When a class implements this, SceneManager.on_content_finished_loading will invoke it
 ## to receive this data and pass it to the next scene
@@ -40,7 +44,15 @@ func receive_data(_data):
 func start_scene() -> void:
 	player.enable()
 	
+	
 ## used for selecting a random spawn for the enemies
 func _get_random_child(parent_node):
 	var random_id = randi() % parent_node.get_child_count()
 	return parent_node.get_child(random_id)
+
+
+func _on_zombie_spawner_time_timeout() -> void:
+	var spawn_point = _get_random_child(spawns).global_position
+	instance = zombie.instantiate()
+	instance.position = spawn_point
+	navigation_region.add_child(instance)

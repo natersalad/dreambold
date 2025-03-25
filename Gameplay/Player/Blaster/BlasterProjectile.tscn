@@ -29,20 +29,21 @@ emission_energy_multiplier = 8.0
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lb2dy"]
 direction = Vector3(0, 0, 1)
+spread = 180.0
 initial_velocity_min = 3.0
 initial_velocity_max = 5.0
 linear_accel_min = 0.999998
 linear_accel_max = 10.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_oa8a8"]
-size = Vector3(0.04, 0.04, 0.04)
+size = Vector3(0.08, 0.08, 0.08)
 
 [node name="BlasterProjectile" type="Node3D"]
 script = ExtResource("1_4suvq")
 
 [node name="Area3D" type="Area3D" parent="."]
-collision_layer = 3
-collision_mask = 3
+collision_layer = 2
+collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
 shape = SubResource("SphereShape3D_2r7l2")
@@ -61,13 +62,14 @@ mesh = SubResource("SphereMesh_hqh0f")
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_wofxy")
 emitting = false
-amount = 10
+amount = 12
 one_shot = true
 explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_lb2dy")
 draw_pass_1 = SubResource("BoxMesh_oa8a8")
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.00232983)
-target_position = Vector3(0, 0, 1)
-collision_mask = 3
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.69536, 0, 0, 0.275563)
+target_position = Vector3(0, 0, 1.5)
+collision_mask = 2
+collide_with_areas = true

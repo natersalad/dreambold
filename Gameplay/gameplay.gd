@@ -14,7 +14,6 @@ class_name Gameplay extends Node3D
 var current_level:Level
 
 func _ready() -> void:
-	
 	SceneManager.load_complete.connect(_on_level_loaded)
 	SceneManager.load_start.connect(_on_load_start)
 	SceneManager.scene_added.connect(_on_level_added)

@@ -1,27 +1,22 @@
-[gd_scene load_steps=15 format=3 uid="uid://c5l1xljlu2wrk"]
+[gd_scene load_steps=12 format=3 uid="uid://c5l1xljlu2wrk"]
 
 [ext_resource type="PackedScene" uid="uid://bwggrf7sbmkcv" path="res://Gameplay/Player/PlayerCharacterScene.tscn" id="1_db3my"]
 [ext_resource type="Script" path="res://Gameplay/Levels/level.gd" id="1_ww2tu"]
 [ext_resource type="Texture2D" uid="uid://c3wt61i40kd0n" path="res://Assets/Textures/kenney_prototype_textures/dark/texture_03.png" id="2_1m2h1"]
 [ext_resource type="Script" path="res://Gameplay/Jumppad/JumppadScript.gd" id="3_w3rps"]
-[ext_resource type="Texture2D" uid="uid://dd4l3c87gndlk" path="res://icon.svg" id="4_vm8uf"]
-[ext_resource type="PackedScene" uid="uid://8bg1lm7rwoqt" path="res://Enemys/Zombie/zombie.tscn" id="6_2ob7m"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fjbi6"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 
-[sub_resource type="Sky" id="Sky_iebnq"]
+[sub_resource type="Sky" id="Sky_aeopd"]
 sky_material = SubResource("ProceduralSkyMaterial_fjbi6")
 
 [sub_resource type="Environment" id="Environment_pyxgo"]
 background_mode = 2
-sky = SubResource("Sky_iebnq")
+sky = SubResource("Sky_aeopd")
 tonemap_mode = 2
 glow_enabled = true
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3nxvw"]
-albedo_texture = ExtResource("4_vm8uf")
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_l1ns8"]
 vertices = PackedVector3Array(-30.2235, 0.0390625, -24.6861, -28.7235, 0.0390625, -24.9361, -28.7235, 0.0390625, -31.9361, -31.2235, 0.0390625, -23.4361, -70.7235, 0.0390625, -31.9361, -9.7235, 0.0390625, -21.6861, -26.2235, 0.0390625, -21.6861, -26.9735, 0.0390625, -20.1861, -28.2235, 0.0390625, -19.6861, -9.7235, 0.0390625, 31.3139, -30.7235, 0.0390625, -20.4361, -70.7235, 0.0390625, 31.3139, -31.4735, 0.0390625, -21.9361, -27.7235, 0.0390625, -24.9361, -26.4735, 0.0390625, -23.9361, -9.7235, 0.0390625, -31.9361, -29.7235, 1.03906, -23.6861, -30.2235, 1.03906, -22.9361, -30.2235, 1.03906, -21.9361, -29.2235, 1.03906, -20.9361, -28.2235, 1.03906, -20.9361, -27.2235, 1.03906, -21.9361, -28.2235, 1.03906, -23.9361, -27.4735, 1.03906, -23.4361)
@@ -40,10 +35,9 @@ albedo_color = Color(0.12549, 0.568627, 1, 1)
 height = 0.15
 radius = 2.0
 
-[node name="Level1" type="Node3D" node_paths=PackedStringArray("player")]
+[node name="Level1" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0546017, 0.0611305, -0.0480537)
 script = ExtResource("1_ww2tu")
-player = NodePath("PlayerCharacter/PlayerCharacterV2")
 
 [node name="Environment" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.8985, 0, 0)
@@ -58,22 +52,11 @@ shadow_enabled = true
 [node name="PlayerCharacter" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.8985, 0, 0)
 
-[node name="PlayerCharacterV2" parent="PlayerCharacter" instance=ExtResource("1_db3my")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38.5544, 1.54036, 0)
+[node name="PlayerCharacter" parent="PlayerCharacter" instance=ExtResource("1_db3my")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38.7231, 0.979471, 0)
 
 [node name="Map" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.8985, 0, 0)
-
-[node name="AITextureWall" type="Node3D" parent="Map"]
-transform = Transform3D(0.0331637, 0, 0.748377, 0, 1, 0, -0.0374189, 0, 0.663273, -51, 0, 14.9295)
-
-[node name="Wall" type="CSGBox3D" parent="Map/AITextureWall"]
-transform = Transform3D(1.00842, -0.0178733, 0, -4.14683e-10, -8.30463e-08, 0.1, -0.00948683, -1.89988, -4.37114e-09, -46.0905, 8.20324, -0.212326)
-material_override = SubResource("StandardMaterial3D_3nxvw")
-use_collision = true
-collision_layer = 3
-collision_mask = 3
-size = Vector3(0.001, 8, 140)
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="Map"]
 navigation_mesh = SubResource("NavigationMesh_l1ns8")
@@ -81,10 +64,10 @@ navigation_mesh = SubResource("NavigationMesh_l1ns8")
 [node name="Blocks" type="Node3D" parent="Map/NavigationRegion3D"]
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Map/NavigationRegion3D/Blocks"]
-transform = Transform3D(0.23857, 0, 0, 0, 0.999535, 0, 0, 0, 0.306202, -40.2094, -701.277, -0.284891)
+transform = Transform3D(0.238571, 0, 0, 0, 0.999535, 0, 0, 0, 0.306202, -40.2094, -701.277, -0.284891)
 use_collision = true
-collision_layer = 3
-collision_mask = 3
+collision_layer = 15
+collision_mask = 15
 size = Vector3(260, 1402.52, 210)
 material = SubResource("StandardMaterial3D_st80m")
 
@@ -111,20 +94,24 @@ shape = SubResource("CylinderShape3D_vm7yl")
 [node name="Enemys" type="Node3D" parent="Map/NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38.8985, 0, 0)
 
-[node name="zombie" parent="Map/NavigationRegion3D/Enemys" instance=ExtResource("6_2ob7m")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -15.7899, -0.315519, 0)
-player_path = NodePath("../../../../PlayerCharacter/PlayerCharacterV2")
+[node name="Spawns" type="Node3D" parent="Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38.8985, 0, 0)
 
-[node name="ZombieSpawner" type="Node3D" parent="Map/NavigationRegion3D/Enemys"]
+[node name="ZombieSpawner" type="Node3D" parent="Map/Spawns"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20.975)
 
-[node name="ZombieSpawner2" type="Node3D" parent="Map/NavigationRegion3D/Enemys"]
+[node name="ZombieSpawner2" type="Node3D" parent="Map/Spawns"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.338, 0, 20.1815)
 
-[node name="ZombieSpawner3" type="Node3D" parent="Map/NavigationRegion3D/Enemys"]
+[node name="ZombieSpawner3" type="Node3D" parent="Map/Spawns"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.338, 0, -24.0729)
 
-[node name="ZombieSpawner4" type="Node3D" parent="Map/NavigationRegion3D/Enemys"]
+[node name="ZombieSpawner4" type="Node3D" parent="Map/Spawns"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.4063, 0, -24.0729)
 
+[node name="ZombieSpawnerTime" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
+
 [connection signal="area_entered" from="Map/NavigationRegion3D/Jumppads/Jumppad/Area3D" to="Map/NavigationRegion3D/Jumppads/Jumppad" method="_on_area_3d_area_entered"]
+[connection signal="timeout" from="ZombieSpawnerTime" to="." method="_on_zombie_spawner_time_timeout"]

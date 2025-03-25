@@ -11,9 +11,12 @@ extends MeshInstance3D
 @export var shoot_cooldown: float = 0.2
 @export var projectile_scene: PackedScene
 
+# Temp Blaster Texures
+@export var original_texture = load("res://temp/img/blaster_texture_2.png")
+@export var ai_texture = load("res://temp/img/blaster_texture_1.png")
+
 # Node references
 @onready var muzzle_point: Node3D = $MuzzlePoint
-@onready var muzzle_flash: OmniLight3D = $MuzzleFlash
 @onready var shoot_timer: Timer = Timer.new()
 @onready var player_char = get_tree().get_first_node_in_group("PlayerCharacter")
 
@@ -39,7 +42,6 @@ func _ready() -> void:
 	shoot_timer.timeout.connect(_on_shoot_timer_timeout)
 	
 	# Configure muzzle flash light
-	muzzle_flash.light_energy = 0
 
 func _process(delta: float) -> void:
 	handle_bob(delta)
@@ -98,11 +100,6 @@ func shoot() -> void:
 	if projectile is RigidBody3D:
 		projectile.apply_central_impulse(-muzzle_point.global_transform.basis.z * 20.0)
 	
-	# Flash muzzle light
-	var tween = create_tween()
-	muzzle_flash.light_energy = 2
-	tween.tween_property(muzzle_flash, "light_energy", 0, 0.1)
-	
 	# TODO: Play sound effect
 	# if shoot_sound:
 	#     shoot_sound.play()
@@ -122,13 +119,13 @@ func change_texture(index: int) -> void:
 	var new_texture: Texture2D
 
 	if index == 1:
-		new_texture = load("res://temp/img/blaster_texture_1.png")
+		new_texture = original_texture
 		print("Loaded texture: blaster_texture_1.png")
 	elif index == 2:
-		new_texture = load("res://temp/img/blaster_texture_2.png") 
+		new_texture = ai_texture
 		print("Loaded texture: blaster_texture_2.png")
 	else:
-		print("Invalid texture index: ", index)
+		push_error("Invalid texture index: ", index)
 		return
 
 	# Get the material and update the albedo texture

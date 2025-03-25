@@ -10,7 +10,6 @@ script = ExtResource("1_0r405")
 [node name="World" type="Node3D" parent="."]
 
 [node name="Level1" parent="World" instance=ExtResource("2_bsmeb")]
-script = null
 
 [node name="HUD" type="Control" parent="."]
 layout_mode = 3

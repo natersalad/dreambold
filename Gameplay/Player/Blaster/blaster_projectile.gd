@@ -1,7 +1,7 @@
 extends Node3D
 
 @export var speed: float = 100.0
-@export var damage: float = 10.0
+@export var damage: float = 1.0
 @export var lifetime: float = 5.0 
 
 @onready var ray = $RayCast3D
@@ -20,6 +20,9 @@ func _physics_process(delta: float) -> void:
 	if ray.is_colliding():
 		mesh.visible = false
 		particles.emitting = true
+		ray.enabled = false
+		if ray.get_collider().is_in_group("enemy"):
+			ray.get_collider().hit()
 		await get_tree().create_timer(1.0).timeout
 		queue_free()
 		

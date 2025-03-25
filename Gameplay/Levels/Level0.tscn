@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://oj3blpxqf1bl"]
+[gd_scene load_steps=17 format=3 uid="uid://btlfuab6wmkp3"]
 
 [ext_resource type="PackedScene" uid="uid://bwggrf7sbmkcv" path="res://Gameplay/Player/PlayerCharacterScene.tscn" id="1_1s5ou"]
 [ext_resource type="Script" path="res://Gameplay/Levels/level.gd" id="1_n2via"]
@@ -54,9 +54,8 @@ radius = 2.0
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3nxvw"]
 albedo_texture = ExtResource("5_ddtt6")
 
-[node name="Level3" type="Node3D" node_paths=PackedStringArray("player")]
+[node name="Level3" type="Node3D"]
 script = ExtResource("1_n2via")
-player = NodePath("PlayerCharacter/PlayerCharacterV2")
 
 [node name="Environment" type="Node3D" parent="."]
 

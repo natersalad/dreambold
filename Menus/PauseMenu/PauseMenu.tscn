@@ -37,9 +37,14 @@ func _on_restart_pressed() -> void:
 func _on_settings_pressed() -> void:
 	pass # TODO
 
+
 func _on_menu_pressed() -> void:
 	resume()
 	SceneManager.swap_scenes(\"res://Menus/MainMenu/menu.tscn\",get_tree().root,$\"../../..\",\"wipe_to_right\")
+
+
+func _on_quit_pressed() -> void:
+	get_tree().quit()
 "
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8cv63"]
@@ -194,6 +199,16 @@ focus_mode = 0
 mouse_filter = 1
 text = "Menu"
 
+[node name="Quit" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
+process_mode = 2
+custom_minimum_size = Vector2(100, 10)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_mode = 0
+mouse_filter = 1
+text = "Quit"
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_7c00t")
@@ -203,3 +218,5 @@ libraries = {
 [connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/Restart" to="." method="_on_restart_pressed"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/Settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/Menu" to="." method="_on_menu_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/Quit" to="." method="_on_menu_pressed"]

@@ -20,10 +20,6 @@ config/icon="res://icon.svg"
 SettingsDataManager="*res://addons/modular-settings-menu/singletons/settings_data_manager.gd"
 SceneManager="*res://Autoloads/SceneManager.gd"
 
-[debug]
-
-settings/stdout/print_fps=true
-
 [display]
 
 window/size/viewport_width=640
