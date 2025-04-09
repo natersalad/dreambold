@@ -1,58 +1,170 @@
 class_name Level extends Node3D
 
-@export var data:LevelDataHandoff
+@export var data: LevelDataHandoff
+@export var enemy_definitions: Array[EnemyDefinition] = []
 
-@onready var spawns = $Map/Spawns
+@onready var ground_spawns = $Map/Spawns/GroundSpawns
+@onready var air_spawns = $Map/Spawns/AirSpawns
 @onready var navigation_region = $Map/NavigationRegion3D/Enemys
 @onready var player = get_tree().get_first_node_in_group("PlayerCharacter")
+@onready var wave_manager = $WaveManager
+@onready var ui_gold_label = $UI/GoldLabel
+@onready var ui_enemies_left = $UI/EnemiesLeftLabel
 
-var zombie = load("res://Enemys/Zombie/zombie.tscn")
 var instance
+var level_gold: int = 0
+
+var last_ground_spawn_index: int = -1
+var last_air_spawn_index: int = -1
 
 func _ready() -> void:
-	player.disable()
-	# This block is here to allow us to test current scene without needing the SceneManager to call these :) 
+	print("[LEVEL] Level _ready() called - starting initialization")
+	print("[LEVEL] Enemy definitions count: ", enemy_definitions.size())
+	# Setup wave manager
+	wave_manager.initialize(enemy_definitions)
+	wave_manager.connect("enemy_spawned", Callable(self, "_on_enemy_spawned"))
+	wave_manager.connect("enemy_killed", Callable(self, "_on_enemy_killed"))
+	wave_manager.connect("wave_completed", Callable(self, "_on_wave_completed"))
+	print("[LEVEL] Wave manager initialized and signals connected")
+	
+	# This block is here to allow us to test current scene without needing the SceneManager
 	if data == null: 
 		start_scene()
 
-## When a class implements this, SceneManager.on_content_finished_loading will invoke it
-## to receive this data and pass it to the next scene
-func get_data():
-	return data
-	
-## 1) emitted at the beginning of SceneManager.on_content_finished_loading
-## When a class implements this, SceneManager.on_content_finished_loading will invoke it
-## to insert data received from the previous scene into this one	
-func receive_data(_data):
-	# implementing class should do some basic checks to make sure it only acts on data it's prepared to accept
-	# if previous scene sends data this scene doesn't need, simple logic as follows ensures no crash occurs
-	# act only on the data you want to receive and process :) 
-	if _data is LevelDataHandoff:
-		data = _data
-		# process data here if need be, for this we just need to receive it but only if it's of the correct data type
-	else:
-		# SceneManager is designed to allow data mismatches like this occur, because you wno't always know
-		# which scene precedes or follows another. For example, this sample project passes data between
-		# levels but not between a level and the start screen, or vice versa. But it's possible Start screen might
-		# look for data from a different scene. So both incoming and outgoing scenes might implement get/receive_data
-		# but you may not always want to process that data. This is way more explanation than you need for something
-		# that's pretty much designed to work this way and fail silently when not in use :D
-		push_warning("Level %s is receiving data it cannot process" % name)
-
-## emitted at the very end of SceneManager.on_content_finished_loading, after the transition has completed
-## 3) Here I'm using it to return control to the user because everything is ready to go
 func start_scene() -> void:
-	player.enable()
+	print("[LEVEL] Level start_scene() called - beginning wave")
+	wave_manager.start_wave(1.0)  # 1 second delay before enemies start spawning
+	update_ui()
+
+func _on_enemy_spawned(enemy_def: EnemyDefinition) -> void:
+	print("[LEVEL] Enemy spawn requested: " + enemy_def.enemy_name + " (Type: " + enemy_def.enemy_type + ")")
+	if enemy_def.enemy_type == "ground":
+		spawn_ground_enemy(enemy_def)
+	else:  # air
+		spawn_air_enemy(enemy_def)
+	update_ui()
+
+func _on_enemy_killed(enemy_def: EnemyDefinition) -> void:
+	level_gold += enemy_def.gold_value
+	update_ui()
+
+func _on_wave_completed(gold_earned: int) -> void:
+	print("[LEVEL] Wave completed! Gold earned: ", gold_earned)
 	
+	# Show completion UI
+	$UI/WaveCompletePanel.visible = true
+	$UI/WaveCompletePanel/GoldEarnedLabel.text = "Gold Earned: " + str(gold_earned)
 	
+	# Prepare data for next scene
+	if data == null:
+		data = LevelDataHandoff.new()
+	data.gold_earned = gold_earned
+	data.enemy_definitions = enemy_definitions
+	
+	# Wait a few seconds then go to shop
+	var transition_timer = get_tree().create_timer(3.0)
+	transition_timer.timeout.connect(func():
+		# Use the SceneManager autoload to change scenes with a more robust approach
+		SceneManager.swap_scenes(
+		"res://Menus/Shop/shop.tscn",  # scene to load
+		get_tree().root.get_node_or_null("Gameplay").get_node_or_null("HUD").get_node_or_null("CanvasLayer"),  # Find HUD node from root
+		self,  # unload current scene
+		"fade_to_black"  # transition type
+		)
+	)
+
+func update_ui() -> void:
+	if ui_gold_label:
+		ui_gold_label.text = "Gold: " + str(level_gold)
+	if ui_enemies_left:
+		var remaining = wave_manager.total_enemies_to_spawn - wave_manager.total_enemies_killed
+		ui_enemies_left.text = "Enemies: " + str(remaining)
+
+func spawn_ground_enemy(enemy_def: EnemyDefinition) -> void:
+	print("[LEVEL] Attempting to spawn ground enemy: " + enemy_def.enemy_name)
+	
+	if !enemy_def.enemy_scene:
+		push_error(("[LEVEL] ERROR: No enemy scene assigned to definition: " + enemy_def.enemy_name))
+		return
+
+	var spawn_data = _get_different_random_child(ground_spawns, last_ground_spawn_index)
+	var spawn_point = spawn_data.node.global_position
+	last_ground_spawn_index = spawn_data.index
+
+	instance = enemy_def.enemy_scene.instantiate()
+	instance.position = spawn_point
+	
+	# Pass the enemy definition to the enemy
+	if instance.has_method("set_enemy_definition"):
+		instance.set_enemy_definition(enemy_def)
+		print("[LEVEL] Enemy def passed to instance")
+	else:
+		push_error("[LEVEL] ERROR: Enemy instance does not have set_enemy_definition method")
+	
+	# Connect death signal
+	if instance.has_node("HealthComponent"):
+		instance.get_node("HealthComponent").connect("health_depleted", 
+			Callable(self, "_on_enemy_health_depleted").bind(instance))
+		print("[LEVEL] HealthComponent signal connected")
+	else:
+		push_error("[LEVEL] ERROR: Enemy instance '%s' does not have HealthComponent node" % enemy_def.enemy_name)
+	navigation_region.add_child(instance)
+	print("[LEVEL] Ground enemy spawned: " + enemy_def.enemy_name)
+
+func spawn_air_enemy(enemy_def: EnemyDefinition) -> void:
+	print("[LEVEL] Attempting to spawn air enemy: " + enemy_def.enemy_name)
+	
+	if !enemy_def.enemy_scene:
+		push_error(("[LEVEL] ERROR: No enemy scene assigned to definition: " + enemy_def.enemy_name))
+		return
+
+	var spawn_data = _get_different_random_child(air_spawns, last_air_spawn_index)
+	var spawn_point = spawn_data.node.global_position
+	last_air_spawn_index = spawn_data.index
+
+	instance = enemy_def.enemy_scene.instantiate()
+	instance.position = spawn_point
+	
+	# Pass the enemy definition to the enemy
+	if instance.has_method("set_enemy_definition"):
+		instance.set_enemy_definition(enemy_def)
+	
+	# Connect death signal
+	if instance.has_node("HealthComponent"):
+		instance.get_node("HealthComponent").connect("health_depleted", 
+			Callable(self, "_on_enemy_health_depleted").bind(instance))
+	navigation_region.add_child(instance)
+
+func _on_enemy_health_depleted(enemy_instance) -> void:
+	wave_manager.on_enemy_killed(enemy_instance)
+
 ## used for selecting a random spawn for the enemies
+func _get_different_random_child(parent_node, last_index: int):
+	var child_count = parent_node.get_child_count()
+
+	if child_count <= 1:
+		return {"node": parent_node.get_child(0) if child_count > 0 else null, "index": 0}
+
+	var random_id = randi() % child_count
+	while random_id == last_index:
+		random_id = randi() % child_count
+	
+	return {"node": parent_node.get_child(random_id), "index": random_id}
+
+# for backwards compatibility
 func _get_random_child(parent_node):
 	var random_id = randi() % parent_node.get_child_count()
 	return parent_node.get_child(random_id)
 
-
-func _on_zombie_spawner_time_timeout() -> void:
-	var spawn_point = _get_random_child(spawns).global_position
-	instance = zombie.instantiate()
-	instance.position = spawn_point
-	navigation_region.add_child(instance)
+func get_data():
+	return data
+	
+func receive_data(_data):
+	if _data is LevelDataHandoff:
+		data = _data
+		
+		# If data has enemy definitions, update our wave
+		if data.enemy_definitions.size() > 0:
+			enemy_definitions = data.enemy_definitions
+	else:
+		push_warning("[LEVEL] Level %s is receiving data it cannot process" % name)

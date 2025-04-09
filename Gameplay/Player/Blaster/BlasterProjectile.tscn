@@ -38,10 +38,10 @@ linear_accel_max = 10.0
 [sub_resource type="BoxMesh" id="BoxMesh_oa8a8"]
 size = Vector3(0.08, 0.08, 0.08)
 
-[node name="BlasterProjectile" type="Node3D"]
+[node name="BlasterProjectile" type="Node3D" groups=["Bullet"]]
 script = ExtResource("1_4suvq")
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="Area3D" type="Area3D" parent="." groups=["Bullet"]]
 collision_layer = 2
 collision_mask = 2
 

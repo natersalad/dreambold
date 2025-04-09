@@ -1,3 +1,6 @@
-class_name LevelDataHandoff extends Node
+extends Resource
+class_name LevelDataHandoff
 
-var position:Vector3
+@export var gold_earned: int = 0
+@export var gold_available: int = 0
+@export var enemy_definitions: Array[EnemyDefinition] = []
