@@ -1,20 +1,28 @@
 extends Control
 
+const MAX_ENEMY_COMPONENTS = 12
+
 # References to nodes
 @onready var blaster = $BorderColor/MarginContainer/CenterColor/HBoxContainer/LeftShop/SubViewportContainer/SubViewport/Blaster
 @onready var stats_display = $BorderColor/MarginContainer/CenterColor/HBoxContainer/LeftShop/RichTextLabel
 @onready var item_container = $BorderColor/MarginContainer/CenterColor/HBoxContainer/LeftShop/ItemContainer
 @onready var currency_label = $BorderColor/MarginContainer/CenterColor/HBoxContainer/LeftShop/CurrencyLabel
-
-# References to nodes for right side
+@onready var enemey_grid = $BorderColor/MarginContainer/CenterColor/HBoxContainer/RightEnemys/VBoxContainer/EnemyGrid
+@onready var raise_prize_button = $BorderColor/MarginContainer/CenterColor/HBoxContainer/RightEnemys/VBoxContainer/ButtonContainer/RaisePrizeButton
 @onready var round_label = $BorderColor/MarginContainer/CenterColor/HBoxContainer/RightEnemys/VBoxContainer/TitleLabel
+@onready var total_prize_label = $BorderColor/MarginContainer/CenterColor/HBoxContainer/RightEnemys/VBoxContainer/TotalPrizeText
+
 
 # Resource for testing/default
 @export var available_items: Array[ItemResource] = []
+@export var enemy_library: EnemyLibrary
 
 # Currency tracking
 var current_gold: int = 0
 var selected_item: ItemResource = null
+var enemy_components: Array[ShopEnemyComponent] = []
+var selected_enemy_component: ShopEnemyComponent = null
+var current_enemy_defs: Array[EnemyDefinition] = []
 
 # Level data handoff reference
 var level_data: LevelDataHandoff
@@ -37,9 +45,13 @@ func _ready():
 	# Setup item components
 	setup_items()
 
+	setup_enemy_grid()
+
 	# Connect fight button
-	var fight_button = $BorderColor/MarginContainer/CenterColor/HBoxContainer/RightEnemys/VBoxContainer/ButtonContainer/Button2
+	var fight_button = $BorderColor/MarginContainer/CenterColor/HBoxContainer/RightEnemys/VBoxContainer/ButtonContainer/FightButton
 	fight_button.pressed.connect(_on_exit_button_pressed)
+
+	raise_prize_button.pressed.connect(_on_raise_prize_button_pressed)
 
 func update_shop_currency():
 	# Update the currency label with the current gold amount
@@ -430,6 +442,146 @@ func display_item_info(item: ItemResource):
 	# Update the RichTextLabel
 	stats_display.text = item_info
 
+# update the total prize
+func update_total_prize():
+	var total_prize = 0
+	for component in enemy_components:
+		total_prize += component.enemy_definition.gold_value * component.enemy_count
+	
+	if total_prize_label:
+		total_prize_label.bbcode_enabled = true
+		total_prize_label.text = "[center]Total Prize: [color=yellow]" + str(total_prize) + " Gold[/color][/center]"
+
+# enemy wagering code
+func setup_enemy_grid():
+	# clear exisiting components
+	for component in enemy_components:
+		component.queue_free()
+	enemy_components.clear()
+	current_enemy_defs.clear()
+
+	var num_enemies = randi_range(1, 4)
+
+	for i in range(num_enemies):
+		add_random_enemy_to_grid()
+
+	update_raise_prize_button_state()
+	update_total_prize()
+
+func add_random_enemy_to_grid():
+	# get random enemy from available enemies
+	if not enemy_library or enemy_library.available_enemies.size() == 0:
+		push_error("[SHOP] No enemies available in the library.")
+		return
+	
+	var enemy_def = enemy_library.get_random_enemy()
+
+	var min_count = enemy_def.min_count if enemy_def.has_method("get_min_count") else 1
+	var max_count = enemy_def.max_count if enemy_def.has_method("get_max_count") else 5
+	var count = randi_range(min_count, max_count)
+
+	# create component
+	var enemy_component = preload("res://scenes/components/shop_enemy_component/ShopEnemyComponent.tscn").instantiate()
+	enemy_component.enemy_definition = enemy_def
+	enemy_component.set_enemy_count(count)
+
+	# connect signal
+	enemy_component.enemy_selected.connect(_on_enemy_selected)
+	
+	# add to grid and array
+	enemey_grid.add_child(enemy_component)
+	enemy_components.append(enemy_component)
+
+func _on_enemy_selected(component: ShopEnemyComponent):
+	# handle enemy selection (show details)
+	if selected_enemy_component == component:
+		selected_enemy_component = null
+		#clear selection display
+	else:
+		selected_enemy_component = component
+		display_enemy_info(component.enemy_definition, component.enemy_count)
+
+func display_enemy_info(def: EnemyDefinition, count: int):
+	# Display info about the enemy in stats_display
+	var info_text = "[b]%s[/b] (x%d)\n" % [def.enemy_name, count]
+	info_text += "[i]%s[/i]\n\n" % def.enemy_description
+	
+	info_text += "[b]Base Stats:[/b]\n"
+	info_text += "Type: %s\n" % def.enemy_type
+	info_text += "Health: %.1f\n" % def.base_health
+	info_text += "Speed: %.1f\n" % def.speed
+	info_text += "Difficulty: %d★\n\n" % def.difficulty_rating
+	
+	info_text += "[b]Combat:[/b]\n" 
+	info_text += "Attack Type: %s\n" % def.attack_type.capitalize()
+	info_text += "Damage: %d\n" % def.attack_damage
+	info_text += "Attack Speed: %.1f\n" % def.attack_speed
+	info_text += "Attack Range: %.1f\n" % def.attack_range
+	
+	if def.attack_effect != "none":
+		info_text += "Effect: %s\n" % def.attack_effect.capitalize()
+	
+	info_text += "\n[b]Reward:[/b]\n"
+	info_text += "Gold Value: %d each\n" % def.gold_value
+	info_text += "Total Gold: [color=yellow]%d[/color]" % (def.gold_value * count)
+
+	stats_display.text = info_text
+	
+func _on_raise_prize_button_pressed():
+	if enemy_components.size() >= MAX_ENEMY_COMPONENTS:
+		show_max_enemies_reached_message()
+		return
+	
+	var max_to_add = MAX_ENEMY_COMPONENTS - enemy_components.size()
+	var additional_enemies = min(randi_range(1, 4), max_to_add)
+
+	for i in range(additional_enemies):
+		add_random_enemy_to_grid()
+
+	update_raise_prize_button_state()
+	update_total_prize()
+
+func update_raise_prize_button_state():
+	# disable button if at or over limit
+	var limit_reached : bool = enemy_components.size() >= MAX_ENEMY_COMPONENTS
+	if limit_reached:
+		show_max_enemies_reached_message()
+
+	raise_prize_button.disabled = limit_reached
+
+	if raise_prize_button.disabled:
+		raise_prize_button.modulate = Color(0.5, 0.5, 0.5)  # Grey out the button
+	else:
+		raise_prize_button.modulate = Color(1, 1, 1)  # Reset to normal color
+
+func show_max_enemies_reached_message():
+	var message = Label.new()
+	message.text = "Very bold of you... Maximum enemies reached!"
+	message.add_theme_color_override("font_color", Color(1, 0.5, 0))
+	message.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	
+	# Add to scene before setting position so size is calculated
+	add_child(message)
+	
+	# Get viewport size and calculate center position
+	var viewport_size = get_viewport_rect().size
+	
+	# Force the label to update its size
+	message.size = Vector2.ZERO
+	await get_tree().process_frame
+	
+	# Center the label on screen
+	message.global_position = Vector2(
+		viewport_size.x / 2 - message.size.x / 2,
+		viewport_size.y / 2 - message.size.y / 2
+	)
+	
+	# Create a fade-out animation
+	var tween = create_tween()
+	tween.tween_property(message, "modulate", Color(1,1,1,0), 4)
+	tween.tween_callback(message.queue_free)
+
+
 # Helper function to get color from rarity enum
 func get_rarity_color_from_enum(rarity_value: int) -> String:
 	match rarity_value:
@@ -450,6 +602,23 @@ func _on_exit_button_pressed():
 	if level_data:
 		level_data.current_weapon = blaster.current_weapon_resource.duplicate()
 
+		# create a new array for the next level's enemy defs
+		var next_level_enemies : Array[EnemyDefinition] = []
+
+		# add all selected enemies to the array based on their counts
+		for component in enemy_components:
+			var enemy_def = component.enemy_definition
+			var count = component.enemy_count
+
+			# add this enemey
+			var enemy_for_level = enemy_def.duplicate()
+			enemy_for_level.base_count = count
+
+			next_level_enemies.append(enemy_for_level)
+		
+		level_data.enemy_definitions = next_level_enemies
+
+		
 	SceneManager.swap_scenes(
 		"res://Gameplay/Levels/Level1.tscn",  # scene to load
 		get_tree().root.get_node_or_null("Gameplay").get_node_or_null("World"),  # Find HUD node from root

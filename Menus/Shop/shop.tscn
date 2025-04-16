@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://88p4e3iddjih"]
+[gd_scene load_steps=8 format=3 uid="uid://88p4e3iddjih"]
 
 [ext_resource type="Script" path="res://Menus/Shop/shop.gd" id="1_6e6vd"]
 [ext_resource type="Script" path="res://Items/item_resource.gd" id="3_d5t83"]
 [ext_resource type="PackedScene" uid="uid://bal151jc0jdej" path="res://Gameplay/Player/Blaster/blaster.tscn" id="3_dyxgg"]
 [ext_resource type="Resource" uid="uid://dy41ivkpjjsbc" path="res://Items/default_item.tres" id="4_0xe6x"]
+[ext_resource type="Resource" uid="uid://bj3dd2wsf6v72" path="res://Enemys/EnemyLibrary.tres" id="4_8kwmn"]
 [ext_resource type="PackedScene" uid="uid://bkv6qsn3fdt1y" path="res://scenes/components/item_component/ItemComponent.tscn" id="5_dt8g6"]
 
 [sub_resource type="Environment" id="Environment_a0vma"]
@@ -17,6 +18,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6e6vd")
 available_items = Array[ExtResource("3_d5t83")]([ExtResource("4_0xe6x"), ExtResource("4_0xe6x"), ExtResource("4_0xe6x")])
+enemy_library = ExtResource("4_8kwmn")
 
 [node name="BorderColor" type="ColorRect" parent="."]
 layout_mode = 1
@@ -104,7 +106,7 @@ stretch = true
 transparent_bg = true
 handle_input_locally = false
 gui_disable_input = true
-size = Vector2i(2, 2)
+size = Vector2i(387, 320)
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="BorderColor/MarginContainer/CenterColor/HBoxContainer/LeftShop/SubViewportContainer/SubViewport"]
@@ -181,20 +183,27 @@ theme_override_font_sizes/font_size = 15
 text = "ROUND No. 1"
 uppercase = true
 
-[node name="GridContainer" type="GridContainer" parent="BorderColor/MarginContainer/CenterColor/HBoxContainer/RightEnemys/VBoxContainer"]
+[node name="EnemyGrid" type="GridContainer" parent="BorderColor/MarginContainer/CenterColor/HBoxContainer/RightEnemys/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 columns = 3
 
+[node name="TotalPrizeText" type="RichTextLabel" parent="BorderColor/MarginContainer/CenterColor/HBoxContainer/RightEnemys/VBoxContainer"]
+custom_minimum_size = Vector2(50, 25)
+layout_mode = 2
+text = "TOTAL PRIZE: 10000"
+
 [node name="ButtonContainer" type="HBoxContainer" parent="BorderColor/MarginContainer/CenterColor/HBoxContainer/RightEnemys/VBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="Button" type="Button" parent="BorderColor/MarginContainer/CenterColor/HBoxContainer/RightEnemys/VBoxContainer/ButtonContainer"]
+[node name="RaisePrizeButton" type="Button" parent="BorderColor/MarginContainer/CenterColor/HBoxContainer/RightEnemys/VBoxContainer/ButtonContainer"]
 layout_mode = 2
+focus_mode = 0
 text = "RAISE PRIZE"
 
-[node name="Button2" type="Button" parent="BorderColor/MarginContainer/CenterColor/HBoxContainer/RightEnemys/VBoxContainer/ButtonContainer"]
+[node name="FightButton" type="Button" parent="BorderColor/MarginContainer/CenterColor/HBoxContainer/RightEnemys/VBoxContainer/ButtonContainer"]
 layout_mode = 2
+focus_mode = 0
 text = "FIGHT"
