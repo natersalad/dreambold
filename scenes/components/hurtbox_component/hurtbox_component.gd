@@ -14,13 +14,10 @@ func _on_body_entered(body: Node) -> void:
 		hit(body)
 
 func hit(bullet) -> void:
-	print("Hit detected with bullet: ", bullet.name)
+	print("[HURTBOX] Hit by bullet damage: " + str(bullet.get_damage() * damage_multiplier))
 	var bullet_damage: int = int(bullet.get_damage() * damage_multiplier)
-	emit_signal("body_part_hit", bullet_damage)
-	print("Damage dealt: ", bullet_damage)
 	if health_component:
 		health_component.damage(bullet_damage)
-		print("Health after damage: ", health_component.get_current_health())
 	else:
 		push_warning("No health component assigned to hurtbox component.")
 

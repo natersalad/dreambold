@@ -1,21 +1,21 @@
 [gd_scene load_steps=5 format=3 uid="uid://bal151jc0jdej"]
 
 [ext_resource type="ArrayMesh" uid="uid://bilwdjert18yi" path="res://Assets/BlasterCannon/samus_highquality_blaster.obj" id="1_kl3jq"]
+[ext_resource type="Resource" uid="uid://bbmu6uamvmnug" path="res://Gameplay/Player/Blaster/BlasterResources/default_blaster.tres" id="2_dm54u"]
 [ext_resource type="Script" path="res://Gameplay/Player/Blaster/Blaster.gd" id="2_w5hj7"]
-[ext_resource type="PackedScene" uid="uid://btj1w2ql37nkc" path="res://Gameplay/Player/Blaster/BlasterProjectile.tscn" id="3_fkht0"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lo0ju"]
 
-[node name="Blaster" type="Node3D"]
+[node name="Blaster" type="Node3D" groups=["PlayerBlaster"]]
+script = ExtResource("2_w5hj7")
+weapon_resource = ExtResource("2_dm54u")
 
-[node name="Blaster" type="MeshInstance3D" parent="."]
+[node name="BlasterMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(-0.008, 0, -6.99382e-10, 0, 0.008, 0, 6.99382e-10, 0, -0.008, 0, 0, 0)
 layers = 1047555
 material_override = SubResource("StandardMaterial3D_lo0ju")
 mesh = ExtResource("1_kl3jq")
 skeleton = NodePath("../../..")
-script = ExtResource("2_w5hj7")
-projectile_scene = ExtResource("3_fkht0")
 
-[node name="MuzzlePoint" type="Marker3D" parent="Blaster"]
-transform = Transform3D(100, 0, 2.38419e-07, 0, 100, 0, -2.38419e-07, 0, 100, -0.392925, 2.64426, 62.7945)
+[node name="MuzzlePoint" type="Marker3D" parent="."]
+transform = Transform3D(-0.8, 0, -7.18456e-08, 0, 0.8, 0, 7.18456e-08, 0, -0.8, 0.00314336, 0.0211541, -0.502356)

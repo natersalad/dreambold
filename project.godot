@@ -19,6 +19,8 @@ config/icon="res://icon.svg"
 
 SettingsDataManager="*res://addons/modular-settings-menu/singletons/settings_data_manager.gd"
 SceneManager="*res://Autoloads/SceneManager.gd"
+GameSettings="*res://Autoloads/GameSettings.gd"
+DebugUtils="*res://Autoloads/DebugUtils.gd"
 
 [display]
 
@@ -31,6 +33,10 @@ window/stretch/aspect="expand"
 [dotnet]
 
 project/assembly_name="dreambold"
+
+[global_group]
+
+PlayerBlaster=""
 
 [gui]
 

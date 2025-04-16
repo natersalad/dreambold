@@ -11,7 +11,7 @@ class_name Gameplay extends Node3D
 @onready var level_holder: Node3D = $World
 @onready var hud: Control = $HUD
 
-var current_level:Level
+var current_level: Level
 
 func _ready() -> void:
 	SceneManager.load_complete.connect(_on_level_loaded)
@@ -37,13 +37,3 @@ func _on_level_added(_level,_loading_screen) -> void:
 func _on_load_start(_loading_screen):
 	pass
 	# keep HUD on top of loading screen - uncomment below to keep HUD up top (see above)
-
-func _on_round_over() -> void:
-	# enter the shop
-	SceneManager.swap_scenes("res://Menus/Shop/shop.tscn", get_tree().root, self, "fade_to_white")
-
-# temporary just to switch scenes
-# TODO - remove this and replace with actual game like killing the monster
-func _input(event: InputEvent) -> void:
-	if event != null and event is InputEventKey and event.pressed and event.keycode == KEY_P:
-		_on_round_over()

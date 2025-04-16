@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=5 format=3 uid="uid://bbmu6uamvmnug"]
+
+[ext_resource type="Script" path="res://Items/item_resource.gd" id="1_fs1h2"]
+[ext_resource type="Script" path="res://Gameplay/Player/Blaster/BlasterResources/weapon_resource.gd" id="1_nhycn"]
+[ext_resource type="Resource" uid="uid://csaqto57im4l3" path="res://Gameplay/Player/Blaster/Projectile/ProjectileResources/default_projectile.tres" id="1_smhw7"]
+[ext_resource type="Texture2D" uid="uid://d2un4dmy435ul" path="res://Assets/BlasterCannon/samus_highquality_blaster_samusweapon_d.png" id="3_yv6co"]
+
+[resource]
+script = ExtResource("1_nhycn")
+weapon_name = "Default Blaster"
+description = "A basic blaster weapon"
+projectile = ExtResource("1_smhw7")
+fire_rate = 5.0
+recoil_strength = 0.1
+recoil_recovery_speed = 10.0
+weapon_texture = ExtResource("3_yv6co")
+equipped_items = Array[ExtResource("1_fs1h2")]([])

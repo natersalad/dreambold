@@ -1,19 +1,24 @@
-[gd_scene load_steps=17 format=3 uid="uid://c5l1xljlu2wrk"]
+[gd_scene load_steps=19 format=3 uid="uid://c5l1xljlu2wrk"]
 
 [ext_resource type="PackedScene" uid="uid://bwggrf7sbmkcv" path="res://Gameplay/Player/PlayerCharacterScene.tscn" id="1_db3my"]
 [ext_resource type="Script" path="res://Gameplay/Levels/level.gd" id="1_ww2tu"]
+[ext_resource type="Resource" uid="uid://bbmu6uamvmnug" path="res://Gameplay/Player/Blaster/BlasterResources/default_blaster.tres" id="2_0jbwt"]
 [ext_resource type="Texture2D" uid="uid://c3wt61i40kd0n" path="res://Assets/Textures/kenney_prototype_textures/dark/texture_03.png" id="2_1m2h1"]
 [ext_resource type="Script" path="res://Enemys/enemy_definition.gd" id="2_awqkc"]
+[ext_resource type="Script" path="res://Items/item_resource.gd" id="2_ycoas"]
 [ext_resource type="Script" path="res://Gameplay/Levels/level_data_handoff.gd" id="3_58tn0"]
 [ext_resource type="Script" path="res://Gameplay/Jumppad/JumppadScript.gd" id="3_w3rps"]
 [ext_resource type="Resource" uid="uid://cctnpuu0n3yxd" path="res://Enemys/Zombie/zombie.tres" id="4_ibjxs"]
 [ext_resource type="Script" path="res://Gameplay/Levels/wave_manager.gd" id="5_gvks4"]
 
-[sub_resource type="Resource" id="Resource_umxlm"]
+[sub_resource type="Resource" id="Resource_kpv2y"]
 script = ExtResource("3_58tn0")
 gold_earned = 0
 gold_available = 0
-enemy_definitions = Array[ExtResource("2_awqkc")]([])
+enemy_definitions = Array[ExtResource("2_awqkc")]([ExtResource("4_ibjxs")])
+round_number = 1
+base_weapon = ExtResource("2_0jbwt")
+collected_items = Array[ExtResource("2_ycoas")]([])
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fjbi6"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -48,8 +53,7 @@ radius = 2.0
 [node name="Level1" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0546017, 0.0611305, -0.0480537)
 script = ExtResource("1_ww2tu")
-data = SubResource("Resource_umxlm")
-enemy_definitions = Array[ExtResource("2_awqkc")]([ExtResource("4_ibjxs")])
+data = SubResource("Resource_kpv2y")
 
 [node name="Environment" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.8985, 0, 0)
@@ -144,19 +148,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="GoldLabel" type="Label" parent="UI"]
 layout_mode = 1
 offset_right = 38.0
 offset_bottom = 22.3333
-text = "Gold:"
 
 [node name="EnemiesLeftLabel" type="Label" parent="UI"]
 layout_mode = 0
 offset_top = 20.0
 offset_right = 40.0
 offset_bottom = 42.3333
-text = "Enemies Left:"
 
 [node name="WaveCompletePanel" type="Panel" parent="UI"]
 visible = false
@@ -172,6 +175,7 @@ offset_right = 113.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="GoldEarnedLabel" type="Label" parent="UI/WaveCompletePanel"]
 layout_mode = 1

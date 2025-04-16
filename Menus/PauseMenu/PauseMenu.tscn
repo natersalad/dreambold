@@ -1,51 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://cghpnt85gsdye"]
+[gd_scene load_steps=7 format=3 uid="uid://dnucvmhos2mij"]
 
 [ext_resource type="Shader" path="res://Menus/PauseMenu/PauseMenu.gdshader" id="1_qkm6d"]
-
-[sub_resource type="GDScript" id="GDScript_qjsho"]
-resource_name = "PauseMenu"
-script/source = "extends Control
-
-func _ready() -> void:
-	$AnimationPlayer.play(\"RESET\")
-
-func resume():
-	get_tree().paused = false
-	$AnimationPlayer.play_backwards(\"blur\")
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	
-func pause():
-	get_tree().paused = true
-	$AnimationPlayer.play(\"blur\")
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-
-func _input(event):
-	if event.is_action_pressed(\"pause\"):
-		if get_tree().paused:
-			resume()
-		else:
-			pause()
-
-func _on_resume_pressed() -> void:
-	resume()
-
-func _on_restart_pressed() -> void:
-	resume()
-	SceneManager.swap_scenes(\"res://Menus/RestartScene/restart.tscn\",get_tree().root,$\"../../..\",\"fade_to_black\")
-
-
-func _on_settings_pressed() -> void:
-	pass # TODO
-
-
-func _on_menu_pressed() -> void:
-	resume()
-	SceneManager.swap_scenes(\"res://Menus/MainMenu/menu.tscn\",get_tree().root,$\"../../..\",\"wipe_to_right\")
-
-
-func _on_quit_pressed() -> void:
-	get_tree().quit()
-"
+[ext_resource type="Script" path="res://Menus/PauseMenu/pause_menu.gd" id="2_uwd54"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8cv63"]
 shader = ExtResource("1_qkm6d")
@@ -119,8 +75,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
-script = SubResource("GDScript_qjsho")
+mouse_filter = 2
+script = ExtResource("2_uwd54")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_8cv63")
@@ -219,4 +175,3 @@ libraries = {
 [connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/Settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/Menu" to="." method="_on_menu_pressed"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/Quit" to="." method="_on_menu_pressed"]

@@ -203,8 +203,15 @@ func _on_content_finished_loading(incoming_scene) -> void:
 	var outgoing_scene = _scene_to_unload	# NEW > can't use current_scene anymore
 	
 	# if our outgoing_scene has data to pass, give it to our incoming_scene
-	if outgoing_scene != null:	
+	print("[SceneManager] Attempting to pass data:")
+	print("[SceneManager] outgoing_scene != null: %s" % (outgoing_scene != null))
+	if outgoing_scene != null:
+		print("[SceneManager] outgoing_scene: %s" % outgoing_scene.name)
+		print("[SceneManager] incoming_scene: %s" % incoming_scene.name)
+		print("[SceneManager] outgoing_scene.has_method('get_data'): %s" % outgoing_scene.has_method("get_data"))
+		print("[SceneManager] incoming_scene.has_method('receive_data'): %s" % incoming_scene.has_method("receive_data"))
 		if outgoing_scene.has_method("get_data") and incoming_scene.has_method("receive_data"):
+			print("[SceneManager] Passing data: %s" % outgoing_scene.get_data())
 			incoming_scene.receive_data(outgoing_scene.get_data())
 	
 	# load the incoming into the designated node

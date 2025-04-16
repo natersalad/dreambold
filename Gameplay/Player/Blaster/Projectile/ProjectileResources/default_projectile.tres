@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ProjectileResource" load_steps=3 format=3 uid="uid://csaqto57im4l3"]
+
+[ext_resource type="Script" path="res://Gameplay/Player/Blaster/Projectile/ProjectileResources/projectile_resource.gd" id="1_5wn32"]
+[ext_resource type="PackedScene" uid="uid://btj1w2ql37nkc" path="res://Gameplay/Player/Blaster/Projectile/BlasterProjectile.tscn" id="1_o036u"]
+
+[resource]
+script = ExtResource("1_5wn32")
+projectile_scene = ExtResource("1_o036u")
+damage = 3.0
+speed = 20.0
+lifetime = 5.0
+applies_burn = false
+burn_damage = 0.0
+burn_duration = 0.0
+applies_freeze = false
+freeze_strength = 0.0
+freeze_duration = 0.0
+bounce_count = 0
+penetration_count = 0

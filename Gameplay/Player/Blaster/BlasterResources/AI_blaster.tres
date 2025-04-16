@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=3 format=3 uid="uid://l5k7eq6mllyc"]
+
+[ext_resource type="Script" path="res://Gameplay/Player/Blaster/BlasterResources/weapon_resource.gd" id="1_8rn0t"]
+[ext_resource type="Resource" uid="uid://csaqto57im4l3" path="res://Gameplay/Player/Blaster/Projectile/ProjectileResources/default_projectile.tres" id="1_mwoc0"]
+
+[resource]
+script = ExtResource("1_8rn0t")
+weapon_name = "AI Blaster"
+description = "A basic blaster weapon"
+default_projectile = ExtResource("1_mwoc0")
+fire_rate = 0.2
+recoil_strength = 0.1
+recoil_recovery_speed = 10.0
+cost = 100
+is_shop_mode = false
+shop_rotation_speed = 1.0
